@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+<a href="#" th:href="@{/create}">Create New User</a>
+
+<table border="1">
+  <thead>
+  <tr>
+    <td>Id</td>
+    <td>Name</td>
+    <td>Action</td>
+  </tr>
+  </thead>
+  <tbody>
+  <!--/*@thymesVar id="user" type="cn.yinguowei.User"*/-->
+  <!--/*@thymesVar id="users" type="java.util.List"*/-->
+  <tr th:each="user : ${users}">
+    <td th:text="${user.id}">1</td>
+    <td th:text="${user.name}">name</td>
+    <td>
+      <a th:href="@{'/users/'+${user.id}+'/modify'}" href="#">Modify</a>
+      <form method="post" th:action="@{'/users/'+${user.id}}" style="display: inline-block">
+        <input type="hidden" name="_method" value="delete">
+        <button type="submit" onclick="return confirm('Sure?')" value="" >Delete</button>
+      </form>
+    </td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

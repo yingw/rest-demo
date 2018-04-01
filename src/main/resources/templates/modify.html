@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+Modify User
+<!--/*@thymesVar id="user" type="cn.yinguowei.User"*/-->
+<form action="#" th:action="@{'/users/'+${user.id}}" th:object="${user}" method="post">
+  <input type="hidden" name="_method" value="put">
+  <!--<input type="hidden" name="id" th:field="*{id}">-->
+  <label for="name">Name:</label>
+  <input type="text" id="name" name="name" th:field="*{name}">
+  <input type="submit">
+</form>
+</body>
+</html>
