@@ -9,7 +9,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -58,7 +57,9 @@ class User {
     @Id @GeneratedValue Long id;
     @NotNull @NonNull String name;
 
-    public boolean isNew() {return this.id == null;}
+    public boolean isNew() {
+        return this.id == null;
+    }
 }
 
 @Component
@@ -99,11 +100,9 @@ class UserResource {
     @GetMapping("/user/{id}")
     public ResponseEntity<User> getUser(@PathVariable long id) {
         final Optional<User> userOptional = userRepository.findById(id);
-        if (userOptional.isPresent()) {
-            return new ResponseEntity<>(userOptional.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
-        }
+        return userOptional
+                .map(user -> new ResponseEntity<>(user, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping("/user")
@@ -111,32 +110,31 @@ class UserResource {
         final Optional<User> userOptional = userRepository.findOneByName(user.getName());
         if (userOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
+        } else {
+            userRepository.save(user);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setLocation(builder.path("/user/{id}").buildAndExpand(user.getId()).toUri());
+            return new ResponseEntity<>(user, headers, HttpStatus.CREATED);
         }
-        userRepository.save(user);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(builder.path("/user/{id}").buildAndExpand(user.getId()).toUri());
-        return new ResponseEntity<>(user, headers, HttpStatus.CREATED);
     }
 
     @PutMapping("/user/{id}")
     public ResponseEntity<User> updateUser(@PathVariable long id, @RequestBody User user) {
-        User currentUser = userRepository.findById(id).get();
-        if (currentUser == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        currentUser.setName(user.getName());
-        userRepository.save(currentUser);
-        return new ResponseEntity<>(currentUser, HttpStatus.OK);
+        final Optional<User> userOptional = userRepository.findById(id);
+        return userOptional.map(user2 -> {
+            user2.setName(user.getName());
+            userRepository.save(user2);
+            return new ResponseEntity<>(user2, HttpStatus.OK);
+        }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @DeleteMapping("/user/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable long id) {
-        Optional<User> currentUser = userRepository.findById(id);
-        if (!currentUser.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        userRepository.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<User> deleteUser(@PathVariable long id) {
+        final Optional<User> userOptional = userRepository.findById(id);
+        return userOptional.map(user -> {
+            userRepository.deleteById(id);
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }
 
@@ -152,8 +150,7 @@ class UserController {
 
     @GetMapping({"/", "/users"})
     public String queryUser(Model model) {
-//        List<LinkedHashMap<String, Object>> users = restTemplate.getForObject(REST_SERVICE_URI + "/users", List.class);
-        List<User> users = restTemplate.getForObject(REST_SERVICE_URI + "/user", List.class);
+        List users = restTemplate.getForObject(REST_SERVICE_URI + "/user", List.class);
         System.out.println("users = " + users);
         model.addAttribute("users", users);
         return "userList";

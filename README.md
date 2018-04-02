@@ -19,12 +19,12 @@ So:
 
 ## Frontend API
 
-- Get: `/users`
+- Get all: `/users`
 - Get: `/users/{id}`
-- Get: `/users/{id}/modify`
-- Get: `/users/{id}/create`
-- Put: `/users/{id}`
-- Post: `/users/{id}`
+- Go modify: `/users/{id}/edit`
+- Go create: `/users/new`
+- Put to update: `/users/{id}`
+- Post to save new: `/users`
 - Delete: `/users/{id}`
 
 ## Development
