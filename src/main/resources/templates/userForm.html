@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+
+    <meta charset="utf-8" th:remove="all">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" th:remove="all">
+    <meta name="viewport" content="width=device-width, initial-scale=1" th:remove="all">
+    <meta name="description" content="" th:remove="all">
+    <meta name="author" content="" th:remove="all">
+
+    <title>SB Admin 2 - Bootstrap Admin Theme</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" th:remove="all">
+
+    <!-- MetisMenu CSS -->
+    <link href="../static/vendor/metisMenu/metisMenu.min.css" rel="stylesheet" th:remove="all">
+
+    <!-- DataTables CSS -->
+    <link href="../static/vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet" th:remove="all">
+
+    <!-- DataTables Responsive CSS -->
+    <link href="../static/vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet" th:remove="all">
+
+    <!-- Custom CSS -->
+    <link href="../static/dist/css/sb-admin-2.css" rel="stylesheet" th:remove="all">
+
+    <!-- Custom Fonts -->
+    <link href="../static/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" th:remove="all">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js" th:remove="all"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js" th:remove="all"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <div id="wrapper" layout:fragment="content">
+
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">User</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Create Or Update User Form
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <!--/*@thymesVar id="user" type="cn.yinguowei.User"*/-->
+                                    <form method="post" role="form" th:action="${user.new} ? '/users' : '/users/' + ${user.id}">
+                                        <input type="hidden" name="_method" value="put" th:if="${!user.new}">
+                                        <div class="form-group">
+                                            <label for="name">Name: </label>
+                                            <input name="name" id="name" class="form-control" th:value="${user.name}">
+                                        </div>
+                                        <button type="submit" class="btn btn-default">Submit</button>
+                                        <button type="reset" class="btn btn-default">Reset</button>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="../static/vendor/jquery/jquery.min.js" th:remove="all"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../static/vendor/bootstrap/js/bootstrap.min.js" th:remove="all"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="../static/vendor/metisMenu/metisMenu.min.js" th:remove="all"></script>
+
+    <!-- DataTables JavaScript -->
+    <script src="../static/vendor/datatables/js/jquery.dataTables.min.js" th:remove="all"></script>
+    <script src="../static/vendor/datatables-plugins/dataTables.bootstrap.min.js" th:remove="all"></script>
+    <script src="../static/vendor/datatables-responsive/dataTables.responsive.js" th:remove="all"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="../static/dist/js/sb-admin-2.js" ></script>
+
+
+</body>
+
+</html>
